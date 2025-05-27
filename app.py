@@ -176,5 +176,3 @@ if st.button("Enter"):
 
         csv = top50.to_csv(index=False)
         st.download_button("Download CSV", csv, "predictions.csv", "text/csv")
-    else:
-        st.warning("Please input valid SMILES or ChEMBL ID before pressing Enter.")
