@@ -119,20 +119,14 @@ if 'smiles' not in st.session_state:
 if 'chembl_id' not in st.session_state:
     st.session_state.chembl_id = ""
 
-# Random sample button for both input types
-# Random sample button for both input types
-if st.button("🎲 Pick Random Sample"):
-    if smiles_input_type == "SMILES Sequence":
-        new_smile = st.session_state.smiles
-        while new_smile == st.session_state.smiles:
-            new_smile = random.choice(sample_smiles_list)
-        st.session_state.smiles = new_smile
-    else:
-        new_chembl = st.session_state.chembl_id
-        while new_chembl == st.session_state.chembl_id:
-            new_chembl = random.choice(sample_chembl_ids)
-        st.session_state.chembl_id = new_chembl
-
+if smiles_input_type == "SMILES Sequence":
+    selected_smiles = st.selectbox("Choose a sample SMILES:", [""] + sample_smiles_list)
+    if selected_smiles:
+        st.session_state.smiles = selected_smiles
+else:
+    selected_chembl = st.selectbox("Choose a sample ChEMBL ID:", [""] + sample_chembl_ids)
+    if selected_chembl:
+        st.session_state.chembl_id = selected_chembl
 
 # Show input fields depending on input type
 if smiles_input_type == "SMILES Sequence":
