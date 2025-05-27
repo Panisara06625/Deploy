@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from rdkit import Chem
 import requests
 import random
 
@@ -42,7 +43,7 @@ sample_chembl_ids = [
     "CHEMBL3126333"
 ]
 
-# === Functions ===
+# Functions 
 def encode_smiles(smiles):
     return [char_to_int_smiles.get(c, 0) for c in smiles]
 
@@ -56,6 +57,10 @@ def fetch_smiles_from_chembl(chembl_id):
     except:
         return None
     return None
+    
+def is_valid_smiles(smiles):
+    return Chem.MolFromSmiles(smiles) is not None
+
 
 @st.cache_data
 def load_protein_data():
@@ -147,7 +152,11 @@ else:
 
 # Prediction triggered by button
 if st.button("Enter"):
-    if smiles_input_final:
+    if not smiles_input_final:
+        st.warning("Please input valid SMILES or ChEMBL ID before pressing Enter.")
+    elif not is_valid_smiles(smiles_input_final):
+        st.error("Invalid SMILES format. Please enter a correct SMILES sequence.")
+    else:
         encoded_smiles = encode_smiles(smiles_input_final)
         padded_smiles = pad_sequences([encoded_smiles], maxlen=max_len_smiles, padding='post')
 
