@@ -6,8 +6,11 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import requests
 import random
 
-# Load model
-model = tf.keras.models.load_model('model_epoch_94.h5')
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model('model_epoch_94.h5')
+
+model = load_model()
 
 # Set max lengths
 max_len_smiles = 100
