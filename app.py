@@ -168,11 +168,11 @@ if st.button("Enter"):
         preds = model.predict([smiles_array, protein_array])
         kd_values = 10 ** (9 - preds.flatten())  # Undo log transform
 
-        df['predicted_Kd(-log(Kd/1e9))'] = kd_values
-        top50 = df.sort_values('predicted_Kd(-log(Kd/1e9))').head(50)
+        df['predicted_Kd'] = kd_values
+        top50 = df.sort_values('predicted_Kd').head(50)
 
         st.subheader("Listed Predictions")
-        st.dataframe(top50[['target_id', 'predicted_Kd(-log(Kd/1e9))']])
+        st.dataframe(top50[['target_id', 'predicted_Kd']])
 
         csv = top50.to_csv(index=False)
         st.download_button("Download CSV", csv, "predictions.csv", "text/csv")
