@@ -6,11 +6,12 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from rdkit import Chem
 import requests
 import random
+from PIL import Image
 
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model('model_epoch_94.h5')
-
+    
 model = load_model()
 
 # Set max lengths
@@ -157,6 +158,12 @@ if st.button("Enter"):
     elif not is_valid_smiles(smiles_input_final):
         st.error("Invalid SMILES format. Please enter a correct SMILES sequence.")
     else:
+        mol = Chem.MolFromSmiles(smiles_input_final)
+        if mol:
+            img = Draw.MolToImage(mol, size=(300, 300))
+            st.subheader("Molecule Structure")
+            st.image(img)
+            
         encoded_smiles = encode_smiles(smiles_input_final)
         padded_smiles = pad_sequences([encoded_smiles], maxlen=max_len_smiles, padding='post')
 
