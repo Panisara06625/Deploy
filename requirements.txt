@@ -1,2 +1,3 @@
 tensorflow
 rdkit-pypi
+pillow
